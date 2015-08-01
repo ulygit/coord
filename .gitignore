@@ -1,5 +1,6 @@
 # IntelliJ IDEA project files
 *.iml
+.idea/
 
 # Java bytecode files
 *.class
