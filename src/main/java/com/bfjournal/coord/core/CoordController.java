@@ -22,9 +22,11 @@ public class CoordController {
     private List<Event> events = new ArrayList<>();
 
     @RequestMapping(value = "/events", method = RequestMethod.POST)
-    public ResponseEntity<?> createEvent(@RequestBody Event event) { // Set the location header for the newly created resource
+    public ResponseEntity<?> createEvent(@RequestBody Event event) {
         event.setId(events.size());
         events.add(event);
+
+        // set Location header in response to new resource URI
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newEventUri = ServletUriComponentsBuilder
                 .fromCurrentRequest()

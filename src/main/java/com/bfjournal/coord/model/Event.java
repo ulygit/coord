@@ -19,6 +19,7 @@ public class Event implements Serializable {
         this(null, name);
     }
 
+    @SuppressWarnings("unused")
     public Event() {
 
     }
