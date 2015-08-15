@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
+    <script src="core.js"></script>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+
+<div ng-app="coordApp">
+    <h2>Start a new Coord!</h2>
+
+    <div ng-controller="CoordController as event">
+        <form ng-submit="event.createEvent(name)">
+            <input type="text" ng-model="name" required="true" placeholder="event name">
+            <input class="btn-primary" type="submit" value="Create Coord">
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

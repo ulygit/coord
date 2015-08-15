@@ -9,14 +9,17 @@ public class Event implements Serializable {
 
     private String name;
 
-    public Event(Integer id, String name) {
+    private String[] contacts;
+
+    public Event(Integer id, String name, String... contacts) {
         super();
         this.id = id;
         this.name = name;
+        this.contacts = contacts.clone();
     }
 
-    public Event(String name) {
-        this(null, name);
+    public Event(String name, String... contacts) {
+        this(null, name, contacts);
     }
 
     @SuppressWarnings("unused")
@@ -40,8 +43,17 @@ public class Event implements Serializable {
         this.name = name;
     }
 
+    public String[] getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(String[] contacts) {
+        this.contacts = contacts;
+    }
+
     @Override
     public String toString() {
         return "Event [id=" + id + ", name=" + name + "]";
     }
+
 }

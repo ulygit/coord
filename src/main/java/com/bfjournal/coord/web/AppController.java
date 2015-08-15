@@ -1,4 +1,4 @@
-package com.bfjournal.coord.core;
+package com.bfjournal.coord.web;
 
 import com.bfjournal.coord.model.Event;
 import com.bfjournal.coord.model.EventsList;
@@ -17,7 +17,7 @@ import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-public class CoordController {
+public class AppController {
 
     private List<Event> events = new ArrayList<>();
 

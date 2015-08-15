@@ -56,4 +56,8 @@ E-mail
 	Postmark
 
 Get rid of EventsList class, if possible.
+
+Hosting
+	Host static content on Amazon S3?
+	Look into Dokku/Digital Ocean as cheaper heroku alternative
 --->
