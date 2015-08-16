@@ -7,14 +7,23 @@
 </head>
 <body>
 
+<h2>Start a new Coord!</h2>
 <div ng-app="coordApp">
-    <h2>Start a new Coord!</h2>
-
     <div ng-controller="CoordController as event">
-        <form ng-submit="event.createEvent(name)">
-            <input type="text" ng-model="name" required="true" placeholder="event name">
-            <input class="btn-primary" type="submit" value="Create Coord">
-        </form>
+        <input type="text" ng-model="event.name" required="true" placeholder="event name">
+
+        <div ng-repeat="contact in event.contacts">
+            <input type="email" ng-model="contact.email" required="false" placeholder="contact email">
+        </div>
+        <div>
+            <form ng-submit="event.addContact(contact)">
+                <input type="email" ng-model="contact.email" required="true" placeholder="contact email">
+                <button type="submit">Add</button>
+            </form>
+        </div>
+        <div>
+            <button ng-click="event.createEvent()">Create Coord</button>
+        </div>
     </div>
 </div>
 

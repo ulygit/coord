@@ -1,46 +1,28 @@
 angular.module('coordApp', [])
-  .controller('CoordController', [ '$http', function($http) {
+  .controller('CoordController', [ '$http', function($http, $scope) {
     var event = this;
     event.name = '';
+    event.contacts = [];
 
-    event.createEvent = function(name) {
+    event.createEvent = function() {
       var dataObj = {
-    				'name' : name,
+    				'name' : event.name,
+    				'contacts' : event.asArray(event.contacts, 'email')
     		};
       var res = $http.post('http://localhost:8080/events', dataObj);
     };
 
-    event.createEvent = function(name) {
-      var dataObj = {
-    				'name' : name,
-    		};
-      var res = $http.post('http://localhost:8080/events', dataObj);
+    event.addContact = function(contact) {
+        event.contacts.push(angular.copy(contact));
+        contact.email = '';
+        console.log(this)
     };
 
-//    todoList.archive = function() {
-//      var oldTodos = todoList.todos;
-//      todoList.todos = [];
-//      angular.forEach(oldTodos, function(todo) {
-//        if (!todo.done) todoList.todos.push(todo);
-//      });
-//    };
-  }]);
-
-
-angular.module('noteApp', [])
-  .controller('Note', function() {
-    var note = this;
-    note.items = [];
-
-    note.add = function() {
-      console.log("before")
-      note.items.push({
-        inlineChecked: false,
-        question: "",
-        questionPlaceholder: "foo",
-        text: ""
-      })
-      console.log("after")
+    event.asArray = function(objects, field) {
+        var arr = [];
+        for (var i=0; i < objects.length ; ++i)
+            arr.push(objects[i][field]);
+        return arr;
     }
 
-  });
+  }]);
