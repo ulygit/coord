@@ -1,16 +1,21 @@
-angular.module('coordApp', [])
-  .controller('CoordController', [ '$http', function($http, $scope) {
+var coord = angular.module('coordApp', []);
+
+coord.controller('CoordController', [ '$http', function($http) {
     var event = this;
     event.name = '';
-    event.contacts = [];
+    event.contacts = [{}];
 
-    event.createEvent = function() {
+    event.submitEvent = function() {
       var dataObj = {
     				'name' : event.name,
     				'contacts' : event.asArray(event.contacts, 'email')
     		};
       var res = $http.post('http://localhost:8080/events', dataObj);
     };
+
+    event.addElement = function() {
+        event.contacts.push({});
+    }
 
     event.addContact = function(contact) {
         event.contacts.push(angular.copy(contact));
@@ -26,3 +31,14 @@ angular.module('coordApp', [])
     }
 
   }]);
+
+coord.directive('autoFocus', function($timeout) {
+    return {
+        restrict: 'AC',
+        link: function(_scope, _element) {
+            $timeout(function(){
+                _element[0].focus();
+            }, 0);
+        }
+    };
+});

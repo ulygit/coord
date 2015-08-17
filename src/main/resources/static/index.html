@@ -10,20 +10,22 @@
 <h2>Start a new Coord!</h2>
 <div ng-app="coordApp">
     <div ng-controller="CoordController as event">
-        <input type="text" ng-model="event.name" required="true" placeholder="event name">
+        <form name="coordForm" novalidate>
+            <input id="eventName" type="text" ng-model="event.name" required placeholder="Enter event name"/>
 
-        <div ng-repeat="contact in event.contacts">
-            <input type="email" ng-model="contact.email" required="false" placeholder="contact email">
-        </div>
-        <div>
-            <form ng-submit="event.addContact(contact)">
-                <input type="email" ng-model="contact.email" required="true" placeholder="contact email">
-                <button type="submit">Add</button>
-            </form>
-        </div>
-        <div>
-            <button ng-click="event.createEvent()">Create Coord</button>
-        </div>
+            <div ng-form="contactsForm">
+                <div ng-repeat="contact in event.contacts" ng-form="contactForm">
+                    <input name="email" type="email" ng-model="contact.email" required
+                           placeholder="Enter contact information"/>
+                    <button type="submit" ng-click="contactsForm.$invalid || event.addElement()" ng-show="$last">Add
+                    </button>
+                    <div ng-show="contactForm.email.$touched && contactForm.$dirty && contactForm.$invalid">A valid
+                        email address is required.
+                    </div>
+                </div>
+            </div>
+            <input type="button" ng-click="event.submitEvent()" value="Create Coord!" ng-disabled="coordForm.$invalid">
+        </form>
     </div>
 </div>
 
