@@ -60,6 +60,7 @@ Get rid of EventsList class, if possible.
 Hosting
 	Host static content on Amazon S3?
 	Look into Dokku/Digital Ocean as cheaper heroku alternative
+	Moving to AWS from heroku: http://www.holovaty.com/writing/aws-notes/
 
 Add support for configuration file in js code.
 --->
