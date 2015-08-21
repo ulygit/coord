@@ -1,7 +1,6 @@
 package com.bfjournal.coord.web;
 
 import com.bfjournal.coord.model.Event;
-import com.bfjournal.coord.model.EventsList;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,10 +38,8 @@ public class AppController {
     }
 
     @RequestMapping(value = "/events", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public EventsList getAllEvents() {
-        EventsList events = new EventsList();
-        events.setEvents(this.events);
-        return events;
+    public ResponseEntity<Event[]> getAllEvents() {
+        return ok(events.toArray(new Event[events.size()]));
     }
 
     @RequestMapping(value = "/events/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,43 +1,50 @@
 package com.bfjournal.coord.functional;
 
+import com.bfjournal.coord.CliApplication;
+import com.bfjournal.coord.model.Contact;
+import com.bfjournal.coord.model.Email;
 import com.bfjournal.coord.model.Event;
-import com.bfjournal.coord.web.SimpleCORSFilter;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.webapp.WebAppContext;
+import com.bfjournal.coord.model.Phone;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.servlet.DispatcherType;
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.EnumSet;
 
 import static com.jayway.restassured.RestAssured.*;
 import static com.jayway.restassured.http.ContentType.JSON;
 import static java.lang.String.format;
+import static java.lang.String.valueOf;
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.iterableWithSize;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = CliApplication.class)
+@WebIntegrationTest(randomPort = true)
+@DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CoordFunctionalTest {
 
-    private int port = 0;
+    @SuppressWarnings("unused")
+    private static final Logger log = LoggerFactory.getLogger(CoordFunctionalTest.class);
+
+    @Value("${local.server.port}")
+    int port = 0;
 
     @Before
     public void setup() throws Exception {
-        WebAppContext context = new WebAppContext();
-        context.setErrorHandler(null);
-        context.setContextPath("/");
-        context.setResourceBase(sourceFolder("main/webapp/"));
-        context.addFilter(SimpleCORSFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
-
-        Server container = new Server(0);
-        container.setHandler(context);
-        container.start();
-
-        port = ((ServerConnector) container.getConnectors()[0]).getLocalPort();
+        CliApplication.start(new String[0]);
     }
 
     @Test
@@ -51,28 +58,30 @@ public class CoordFunctionalTest {
     }
 
     @Test
-    public void canCreateAndRetrieveNewEvents() throws URISyntaxException {
+    public void canCreateAndRetrieveEvents() throws URISyntaxException {
         // create event
-        Event event = buildUniqueEvent();
-        given().
-                contentType(JSON).
-                body(event).
-                when().
-                post(eventsEndpoint()).
-                then().
-                header("Location", is(eventsEndpoint() + "/0"));
+        for (Event event : asList(buildEmailOnlyEvent(), buildPhoneOnlyEvent(), buildPhoneAndEmailEvent())) {
+            String eventUri = given().
+                        contentType(JSON).
+                        body(event).
+                    when().
+                        post(eventsEndpoint()).
+                    then().
+                        extract().header("Location");
 
-        // lookup event and make sure it's as expected
-        get(eventsEndpoint() + "/0").
-                then().
-                contentType(JSON).
-                body("name", is(event.getName())).
-                body("contacts", contains(event.getContacts()));
+            // lookup event and make sure it's as expected
+            Event returnedEvent = get(eventUri).
+                    then().
+                        contentType(JSON).
+                        extract().as(Event.class);
+            assertThat(format("%s", event), returnedEvent.getName(), is(event.getName()));
+            assertThat(format("%s", event), returnedEvent.getContacts(), is(event.getContacts()));
+        }
     }
 
     @Test
     public void canRetrieveAllEvents() throws URISyntaxException {
-        Event[] events = new Event[]{buildUniqueEvent(), buildUniqueEvent()};
+        Event[] events = new Event[]{buildEmailOnlyEvent(), buildPhoneAndEmailEvent(), buildPhoneOnlyEvent()};
 
         for (Event event : events) {
             given().
@@ -85,9 +94,10 @@ public class CoordFunctionalTest {
         get(eventsEndpoint()).
                 then().
                 contentType(JSON).
-                body("events", iterableWithSize(2)).
-                body("events[0].name", is(events[0].getName())).
-                body("events[1].name", is(events[1].getName()));
+                body(".", iterableWithSize(3)).
+                body("[0].name", is(events[0].getName())).
+                body("[1].name", is(events[1].getName())).
+                body("[2].name", is(events[2].getName()));
     }
 
     @Test
@@ -95,7 +105,7 @@ public class CoordFunctionalTest {
         // create event
         String eventUrl = given().
                 contentType(JSON).
-                body(buildUniqueEvent()).
+                body(buildEmailOnlyEvent()).
                 when().
                 post(eventsEndpoint()).
                 thenReturn().
@@ -111,17 +121,22 @@ public class CoordFunctionalTest {
         get(eventUrl).then().assertThat().statusCode(is(404));
     }
 
-    private Event buildUniqueEvent() {
-        return new Event("Event-" + randomNumeric(5), format("%s@dummy.com", randomAlphabetic(10)));
+    private Event buildPhoneAndEmailEvent() {
+        return new Event("Event-" + randomNumeric(5),
+                new Contact(new Phone(valueOf(randomNumeric(10)))),
+                new Contact(new Email(format("%s@dummy.com", randomAlphabetic(10)))));
+    }
+
+    private Event buildPhoneOnlyEvent() {
+        return new Event("Event-" + randomNumeric(5), new Contact(new Phone(valueOf(randomNumeric(10)))));
+    }
+
+    private Event buildEmailOnlyEvent() {
+        return new Event("Event-" + randomNumeric(5), new Contact(new Email(format("%s@dummy.com", randomAlphabetic(10)))));
     }
 
     private URI eventsEndpoint() throws URISyntaxException {
         return new URI("http://localhost:" + port + "/events");
-    }
-
-    private String sourceFolder(final String path) throws Exception {
-        File testRoot = new File(ClassLoader.getSystemResource("crumb").toURI()).getParentFile().getParentFile().getParentFile();
-        return new File(testRoot, "src/" + path).getAbsolutePath();
     }
 
 }

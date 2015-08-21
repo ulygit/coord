@@ -1,6 +1,7 @@
 package com.bfjournal.coord.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -9,16 +10,16 @@ public class Event implements Serializable {
 
     private String name;
 
-    private String[] contacts;
+    private Contact[] contacts;
 
-    public Event(Integer id, String name, String... contacts) {
+    public Event(Integer id, String name, Contact... contacts) {
         super();
         this.id = id;
         this.name = name;
         this.contacts = contacts.clone();
     }
 
-    public Event(String name, String... contacts) {
+    public Event(String name, Contact... contacts) {
         this(null, name, contacts);
     }
 
@@ -43,17 +44,21 @@ public class Event implements Serializable {
         this.name = name;
     }
 
-    public String[] getContacts() {
+    public Contact[] getContacts() {
         return contacts;
     }
 
-    public void setContacts(String[] contacts) {
+    public void setContacts(Contact[] contacts) {
         this.contacts = contacts;
     }
 
+
     @Override
     public String toString() {
-        return "Event [id=" + id + ", name=" + name + "]";
+        return "Event{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", contacts=" + Arrays.toString(contacts) +
+                '}';
     }
-
 }

@@ -8,7 +8,7 @@ coord.controller('CoordController', [ '$http', function($http) {
     event.submitEvent = function() {
       var dataObj = {
     				'name' : event.name,
-    				'contacts' : event.asArray(event.contacts, 'email')
+    				'contacts' : event.contacts
     		};
       var res = $http.post('http://localhost:8080/events', dataObj);
     };

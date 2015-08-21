@@ -1,0 +1,21 @@
+core:
+    project:
+        name: Coord
+
+filter:
+    log:
+        max-payload-length: 1000
+    cors:
+        allowed-origins: '*'
+        allowed-methods:
+            - POST
+            - GET
+            - OPTIONS
+            - DELETE
+        max-age: 3600
+        allowed-headers:
+            - Origin
+            - X-Requested-With
+            - Content-Type
+            - Accept
+
