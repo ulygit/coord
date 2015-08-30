@@ -5,7 +5,6 @@ import com.bfjournal.coord.model.Contact;
 import com.bfjournal.coord.model.Email;
 import com.bfjournal.coord.model.Event;
 import com.bfjournal.coord.model.Phone;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -40,12 +39,7 @@ public class CoordFunctionalTest {
     private static final Logger log = LoggerFactory.getLogger(CoordFunctionalTest.class);
 
     @Value("${local.server.port}")
-    int port = 0;
-
-    @Before
-    public void setup() throws Exception {
-        CliApplication.start(new String[0]);
-    }
+    private int port = 0;
 
     @Test
     public void verifyCrossSiteResourceSharingIsSupported() throws URISyntaxException {

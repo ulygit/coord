@@ -6,28 +6,28 @@ coord.controller('CoordController', [ '$http', function($http) {
     event.contacts = [{}];
 
     event.submitEvent = function() {
+        classify = function(contact) {
+            modcontact = {};
+            if (contact.type === 'email') {
+                modcontact.email = contact.emailOrPhone;
+            } else if (contact.type === 'phone') {
+                modcontact.phone = contact.emailOrPhone;
+            }
+            return modcontact;
+        }
+
+        deleteUnknown = function(contact) {
+            return 'email' in contact || 'phone' in contact;
+        }
       var dataObj = {
     				'name' : event.name,
-    				'contacts' : event.contacts
+    				'contacts' : event.contacts.map(classify)
     		};
       var res = $http.post('http://localhost:8080/events', dataObj);
     };
 
     event.addElement = function() {
         event.contacts.push({});
-    }
-
-    event.addContact = function(contact) {
-        event.contacts.push(angular.copy(contact));
-        contact.email = '';
-        console.log(this)
-    };
-
-    event.asArray = function(objects, field) {
-        var arr = [];
-        for (var i=0; i < objects.length ; ++i)
-            arr.push(objects[i][field]);
-        return arr;
     }
 
   }]);

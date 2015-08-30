@@ -18,4 +18,3 @@ filter:
             - X-Requested-With
             - Content-Type
             - Accept
-

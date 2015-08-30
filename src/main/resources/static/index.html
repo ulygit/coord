@@ -23,11 +23,12 @@
                             </button>
                         </td>
                         <td>
-                            <input name="email" type="email" ng-model="contact.email" required
+                            <input type="hidden" ng-model="contact.type" readonly value="email">
+                            <input name="emailOrPhone" type="email" ng-model="contact.emailOrPhone" required
                                    placeholder="Enter contact information"/>
                         </td>
                         <td>
-                            <span ng-show="contactForm.email.$touched && contactForm.$dirty && contactForm.$invalid">A valid
+                            <span ng-show="contactForm.emailOrPhone.$touched && contactForm.$dirty && contactForm.$invalid">A valid
                             email address is required.
                             </span>
                         </td>

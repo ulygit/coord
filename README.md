@@ -49,16 +49,15 @@ Coord is GPL v3.
 <!---
 SMS
 	Twilio
+
 E-mail
 	SendGrid
 	Mandrill
 	Mailgun
 	Postmark
 
-Get rid of EventsList class, if possible.
-
 Hosting
-	Host static content on Amazon S3?
+	Host static content on Amazon S3 with Cloud Front?
 	Look into Dokku/Digital Ocean as cheaper heroku alternative
 	Moving to AWS from heroku: http://www.holovaty.com/writing/aws-notes/
 

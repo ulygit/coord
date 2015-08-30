@@ -6,7 +6,7 @@
     <groupId>com.bfjournal</groupId>
     <artifactId>coord</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>coord</name>
     <description>Lassoing friends.</description>
@@ -22,17 +22,36 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <jetty.version>9.3.2.v20150730</jetty.version>
     </properties>
 
     <dependencies>
+        <!-- coord ui - overlaid during packaging -->
+        <dependency>
+            <groupId>com.bfjournal</groupId>
+            <artifactId>coord-ui</artifactId>
+            <version>0.0.5</version>
+            <type>zip</type>
+	    <scope>provided</scope>
+        </dependency>
+
         <!--<dependency>-->
         <!--<groupId>org.springframework.boot</groupId>-->
         <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
         <!--</dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
 
         <!--<dependency>-->
@@ -41,24 +60,14 @@
         <!--<version>9.4-1201-jdbc41</version>-->
         <!--<scope>runtime</scope>-->
         <!--</dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-
+        <!-- fluent rest endpoint testing package -->
         <dependency>
             <groupId>com.jayway.restassured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -70,12 +79,27 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <overlays>
+                        <overlay>
+                            <groupId>com.bfjournal</groupId>
+                            <artifactId>coord-ui</artifactId>
+                            <type>zip</type>
+                        </overlay>
+                    </overlays>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
-
 
 </project>

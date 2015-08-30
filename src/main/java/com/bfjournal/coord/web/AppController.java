@@ -16,11 +16,12 @@ import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
+@RequestMapping("/events")
 public class AppController {
 
     private List<Event> events = new ArrayList<>();
 
-    @RequestMapping(value = "/events", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
         event.setId(events.size());
         events.add(event);
@@ -37,12 +38,12 @@ public class AppController {
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/events", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Event[]> getAllEvents() {
         return ok(events.toArray(new Event[events.size()]));
     }
 
-    @RequestMapping(value = "/events/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Event> getEventById(@PathVariable("id") int id) {
         if (id < 0 || id >= events.size()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -50,7 +51,7 @@ public class AppController {
         return ok(events.get(id));
     }
 
-    @RequestMapping(value = "/events/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteEventById(@PathVariable("id") int id) {
         if (id < 0 || id >= events.size()) {
             return notFound().build();
