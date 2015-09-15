@@ -57,9 +57,13 @@ E-mail
 	Postmark
 
 Hosting
-	Host static content on Amazon S3 with Cloud Front?
+	Host static content on Amazon S3 with CloudFront?
 	Look into Dokku/Digital Ocean as cheaper heroku alternative
 	Moving to AWS from heroku: http://www.holovaty.com/writing/aws-notes/
+	Cloudflare on Site5
 
 Add support for configuration file in js code.
+
+Mobile
+    Cordova
 --->
