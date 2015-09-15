@@ -25,15 +25,6 @@
     </properties>
 
     <dependencies>
-        <!-- coord ui - overlaid during packaging -->
-        <dependency>
-            <groupId>com.bfjournal</groupId>
-            <artifactId>coord-ui</artifactId>
-            <version>0.0.5</version>
-            <type>zip</type>
-	    <scope>provided</scope>
-        </dependency>
-
         <!--<dependency>-->
         <!--<groupId>org.springframework.boot</groupId>-->
         <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
@@ -83,20 +74,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <overlays>
-                        <overlay>
-                            <groupId>com.bfjournal</groupId>
-                            <artifactId>coord-ui</artifactId>
-                            <type>zip</type>
-                        </overlay>
-                    </overlays>
-                </configuration>
             </plugin>
 
         </plugins>
