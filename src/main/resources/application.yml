@@ -18,3 +18,5 @@ filter:
             - X-Requested-With
             - Content-Type
             - Accept
+        expose-headers:
+            - Location

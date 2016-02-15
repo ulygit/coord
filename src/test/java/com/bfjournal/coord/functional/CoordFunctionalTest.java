@@ -48,6 +48,7 @@ public class CoordFunctionalTest {
                 header("Access-Control-Allow-Headers", is("Origin, X-Requested-With, Content-Type, Accept")).
                 header("Access-Control-Allow-Methods", is("POST, GET, OPTIONS, DELETE")).
                 header("Access-Control-Max-Age", is("3600")).
+                header("Access-Control-Expose-Headers", is("Location")).
                 header("Access-Control-Allow-Origin", is("*"));
     }
 

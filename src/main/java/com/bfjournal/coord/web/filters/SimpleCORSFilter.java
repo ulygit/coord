@@ -25,6 +25,7 @@ public class SimpleCORSFilter implements Filter {
     private List<String> allowedMethods = asList("POST", "GET", "OPTIONS", "DELETE");
     private int maxAge = 3600;
     private List<String> allowedHeaders = asList("Origin", "X-Requested-With", "Content-Type", "Accept");
+    private List<String> exposeHeaders = asList("Location");
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
@@ -32,6 +33,7 @@ public class SimpleCORSFilter implements Filter {
         response.setHeader("Access-Control-Allow-Methods", join(", ", allowedMethods));
         response.setHeader("Access-Control-Max-Age", valueOf(maxAge));
         response.setHeader("Access-Control-Allow-Headers", join(", ", allowedHeaders));
+        response.setHeader("Access-Control-Expose-Headers", join(", ", exposeHeaders));
         chain.doFilter(req, res);
     }
 
@@ -71,5 +73,13 @@ public class SimpleCORSFilter implements Filter {
 
     public void setAllowedHeaders(List<String> allowedHeaders) {
         this.allowedHeaders = allowedHeaders;
+    }
+
+    public List<String> getExposeHeaders() {
+        return exposeHeaders;
+    }
+
+    public void setExposeHeaders(List<String> exposedHeaders) {
+        this.exposeHeaders = exposedHeaders;
     }
 }
